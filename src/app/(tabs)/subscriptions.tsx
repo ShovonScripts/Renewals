@@ -14,7 +14,7 @@ import { subscriptionTotals, activeSubscriptions } from '@/domain/totals';
 import { daysLeft } from '@/domain/dates';
 
 export default function SubscriptionsScreen() {
-  const { t, formatDate, toBanglaDigits, lang } = useT();
+  const { t, formatDate } = useT();
   const items = useStore((state) => state.items);
   const settings = useStore((state) => state.settings);
 
@@ -23,8 +23,7 @@ export default function SubscriptionsScreen() {
 
   const formatAmount = (val: number) => {
     const rounded = val.toFixed(2);
-    const str = `${settings.currencySymbol} ${rounded}`;
-    return lang === 'bn' ? toBanglaDigits(str) : str;
+    return `${settings.currencySymbol} ${rounded}`;
   };
 
   return (

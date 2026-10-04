@@ -1,10 +1,8 @@
-/* eslint-disable import/no-unresolved */
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, FlatList, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import * as Notifications from 'expo-notifications';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -30,9 +28,15 @@ export default function UpcomingScreen() {
     }
 
     async function checkPermission() {
-      const { status } = await Notifications.getPermissionsAsync();
-      if (status !== 'granted') {
-        setShowPermissionBanner(true);
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const Notifications = require('expo-notifications');
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status !== 'granted') {
+          setShowPermissionBanner(true);
+        }
+      } catch {
+        // Notifications not available in Expo Go
       }
     }
     checkPermission();
@@ -55,18 +59,10 @@ export default function UpcomingScreen() {
       <SafeAreaView style={styles.safeArea} edges={['top']}>
         {showPermissionBanner ? (
           <Pressable style={styles.banner} onPress={() => router.push('/help-reminders')}>
-            <Ionicons name="notifications-off-outline" size={20} color="#D32F2F" style={styles.bannerIcon} />
+            <Ionicons name="notifications-off-outline" size={20} color="#991B1B" style={styles.bannerIcon} />
             <ThemedText style={styles.bannerText}>{t('home.permissionBanner')}</ThemedText>
-            <Ionicons name="chevron-forward" size={16} color="#D32F2F" />
+            <Ionicons name="chevron-forward" size={16} color="#991B1B" />
           </Pressable>
-        ) : null}
-
-        {overdueCount > 0 ? (
-          <View style={styles.overdueHeader}>
-            <ThemedText type="smallBold" style={styles.overdueText}>
-              {t('home.overdueCount', { count: overdueCount })}
-            </ThemedText>
-          </View>
         ) : null}
 
         {activeItems.length === 0 ? (
@@ -82,6 +78,27 @@ export default function UpcomingScreen() {
             data={groups}
             keyExtractor={(group) => group.bucket}
             contentContainerStyle={styles.listContent}
+            ListHeaderComponent={
+              <Card style={styles.heroCard}>
+                <View style={styles.heroRow}>
+                  <View>
+                    <ThemedText type="small" themeColor="textSecondary">Overview</ThemedText>
+                    <ThemedText type="subtitle" style={styles.heroTitle}>
+                      {activeItems.length} {activeItems.length === 1 ? 'Item Tracked' : 'Items Tracked'}
+                    </ThemedText>
+                  </View>
+                  {overdueCount > 0 ? (
+                    <View style={styles.heroBadge}>
+                      <ThemedText style={styles.heroBadgeText}>{overdueCount} Overdue</ThemedText>
+                    </View>
+                  ) : (
+                    <View style={[styles.heroBadge, { backgroundColor: '#DCFCE7' }]}>
+                      <ThemedText style={[styles.heroBadgeText, { color: '#166534' }]}>All Clear</ThemedText>
+                    </View>
+                  )}
+                </View>
+              </Card>
+            }
             renderItem={({ item: group }) => (
               <View style={styles.section}>
                 <ThemedText type="smallBold" style={styles.sectionTitle}>
@@ -125,23 +142,45 @@ const styles = StyleSheet.create({
   banner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFCDD2',
+    backgroundColor: '#FEE2E2',
     padding: 12,
     marginHorizontal: 16,
     marginTop: 8,
-    borderRadius: 8,
+    borderRadius: 10,
   },
   bannerIcon: { marginRight: 8 },
-  bannerText: { flex: 1, color: '#B71C1C', fontSize: 13, fontWeight: '600' },
-  overdueHeader: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#FFEBEE',
+  bannerText: { flex: 1, color: '#991B1B', fontSize: 13, fontWeight: '600' },
+  heroCard: {
+    marginHorizontal: 0,
+    marginBottom: 20,
+    padding: 18,
+    backgroundColor: '#F0F9FF',
+    borderColor: '#BAE6FD',
   },
-  overdueText: { color: '#C62828' },
+  heroRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  heroTitle: {
+    fontSize: 24,
+    marginTop: 2,
+    color: '#0369A1',
+  },
+  heroBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: '#FEE2E2',
+  },
+  heroBadgeText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#991B1B',
+  },
   listContent: { padding: 16, paddingBottom: 80 },
   section: { marginBottom: 16 },
-  sectionTitle: { marginBottom: 8, opacity: 0.7, textTransform: 'uppercase', fontSize: 12 },
+  sectionTitle: { marginBottom: 8, opacity: 0.7, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.5 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -158,13 +197,13 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#0284C7',
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 4,
+    elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
   },
 });

@@ -33,9 +33,9 @@ export const CORRUPT_KEY_PREFIX = '@renewals/corrupt-';
 export const STATE_VERSION = 1;
 
 export const DEFAULT_SETTINGS: Settings = {
-  language: 'bn',
-  currencyCode: 'BDT',
-  currencySymbol: '৳',
+  language: 'en',
+  currencyCode: 'USD',
+  currencySymbol: '$',
   notifyHour: 9,
   notifyMinute: 0,
   defaultReminderDays: [30, 7, 1],
@@ -46,12 +46,11 @@ export const DEFAULT_SETTINGS: Settings = {
 
 // --------------------------------------------------------------------------- ids
 
+let sequence = 0;
+
 function randomBase36(length: number): string {
-  let out = '';
-  while (out.length < length) {
-    out += Math.random().toString(36).slice(2);
-  }
-  return out.slice(0, length);
+  sequence = (sequence + 1) % 1679616;
+  return sequence.toString(36).padStart(length, '0');
 }
 
 /** `itm_<Date.now() in base36>_<random 4 chars base36>` — docs/DATA_MODEL.md ("IDs"). */

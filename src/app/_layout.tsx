@@ -3,6 +3,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
+import { startNotificationSync } from '@/services/notifications';
+
 // Phase 0 placeholder. Phase 3 adds the hydration gate: this layout must hold the
 // splash screen until the persisted store has rehydrated (see SCREENS.md).
 SplashScreen.preventAutoHideAsync();
@@ -13,6 +15,10 @@ export default function RootLayout() {
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
+
+  // Reconcile reminders on app start, on foreground, and after any item or settings change
+  // (docs/ARCHITECTURE.md). Mounted once, at the root, for the lifetime of the app.
+  useEffect(() => startNotificationSync(), []);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

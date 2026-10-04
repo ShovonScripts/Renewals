@@ -397,3 +397,4 @@ export type RenewalsStore = ReturnType<typeof createRenewalsStore>;
 
 /** The app-wide store. Screens read from this and call its actions. */
 export const useRenewalsStore = createRenewalsStore();
+export const useStore = useRenewalsStore;

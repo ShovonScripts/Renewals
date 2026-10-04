@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, Alert, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Notifications from 'expo-notifications';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { useT } from '@/i18n';
-import { sendTestNotificationAsync } from '@/services/notifications';
+import { readPermissionAsync, sendTestNotificationAsync } from '@/services/notifications';
 
 export default function HelpRemindersScreen() {
   const { t } = useT();
@@ -16,8 +15,8 @@ export default function HelpRemindersScreen() {
 
   useEffect(() => {
     async function checkPerm() {
-      const { status } = await Notifications.getPermissionsAsync();
-      setPermissionStatus(status);
+      const res = await readPermissionAsync();
+      setPermissionStatus(res.permission);
     }
     checkPerm();
   }, []);

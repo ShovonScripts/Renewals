@@ -16,20 +16,20 @@ export function DaysLeftBadge({ daysLeft }: DaysLeftBadgeProps) {
   if (daysLeft < 0) {
     const abs = Math.abs(daysLeft);
     text = abs === 1 ? t('common.overdueDay') : t('common.overdueDays', { count: abs });
-    bgColor = '#FFCDD2';
-    textColor = '#B71C1C';
+    bgColor = '#FEE2E2';
+    textColor = '#991B1B';
   } else if (daysLeft === 0) {
     text = t('common.today');
-    bgColor = '#FFE0B2';
-    textColor = '#E65100';
+    bgColor = '#FEF3C7';
+    textColor = '#92400E';
   } else if (daysLeft <= 7) {
     text = daysLeft === 1 ? t('common.dayLeft') : t('common.daysLeft', { count: daysLeft });
-    bgColor = '#FFF9C4';
-    textColor = '#F57F17';
+    bgColor = '#FEF9C3';
+    textColor = '#854D0E';
   } else {
     text = t('common.daysLeft', { count: daysLeft });
-    bgColor = '#E8F5E9';
-    textColor = '#2E7D32';
+    bgColor = '#DCFCE7';
+    textColor = '#166534';
   }
 
   return (
@@ -41,13 +41,14 @@ export function DaysLeftBadge({ daysLeft }: DaysLeftBadgeProps) {
 
 const styles = StyleSheet.create({
   badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
     alignSelf: 'flex-start',
   },
   text: {
     fontSize: 12,
     fontWeight: '700',
+    letterSpacing: 0.2,
   },
 });

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import { StyleSheet, View, ScrollView, Pressable, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -26,24 +25,6 @@ export default function SettingsScreen() {
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea} edges={['top']}>
         <ScrollView contentContainerStyle={styles.content}>
-          <ThemedText type="smallBold" style={styles.sectionHeader}>{t('settings.language')}</ThemedText>
-          <Card style={styles.card}>
-            <View style={styles.row}>
-              <Pressable
-                style={[styles.optionBtn, settings.language === 'en' && styles.optionBtnActive]}
-                onPress={() => updateSettings({ language: 'en' })}
-              >
-                <ThemedText style={[styles.optionText, settings.language === 'en' && styles.optionTextActive]}>English</ThemedText>
-              </Pressable>
-              <Pressable
-                style={[styles.optionBtn, settings.language === 'bn' && styles.optionBtnActive]}
-                onPress={() => updateSettings({ language: 'bn' })}
-              >
-                <ThemedText style={[styles.optionText, settings.language === 'bn' && styles.optionTextActive]}>বাংলা</ThemedText>
-              </Pressable>
-            </View>
-          </Card>
-
           <ThemedText type="smallBold" style={styles.sectionHeader}>{t('settings.theme')}</ThemedText>
           <Card style={styles.card}>
             <View style={styles.row}>
